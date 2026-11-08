@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Chessbe — a quiet place to explore the chessboard.">
+    <meta name="theme-color" content="#f5f3ee">
+    <title>Chessbe · Board explorer</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Chessbe home"><span class="brand-mark" aria-hidden="true">♞</span>chessbe<span class="brand-dot">.</span></a>
+      <span class="header-label">BOARD EXPLORER</span>
+      <a class="source-link" href="https://github.com/toxa81/chessbe">GitHub <span aria-hidden="true">↗</span></a>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow"><span></span> THE FIRST POSITION</p>
+        <h1 id="page-title">Every game starts here.</h1>
+        <p class="subtitle">Sixty-four squares. A world of possibilities.</p>
+      </section>
+      <section class="workspace" aria-label="Chessboard explorer">
+        <div class="board-column">
+          <div class="player"><span class="player-icon black" aria-hidden="true">♟</span><span>Black pieces<small>Starting position</small></span><span class="piece-count">16 pieces</span></div>
+          <div class="board-frame"><div id="board" class="board" role="group" aria-label="Chessboard, white at bottom"></div></div>
+          <div class="player"><span class="player-icon white" aria-hidden="true">♟</span><span>White pieces<small>White to move</small></span><span class="piece-count">16 pieces</span></div>
+        </div>
+        <aside class="panel">
+          <div class="panel-heading"><span class="eyebrow">THE BOARD</span><span class="version">v0.1</span></div>
+          <h2>A fresh start.</h2>
+          <p>The classic starting position. Take a look around, select a square, or see the board from the other side.</p>
+          <div class="position-detail"><span class="status-dot"></span><span>Starting position</span><span class="turn">White to move</span></div>
+          <div class="selection"><span class="detail-label">SELECTED SQUARE</span><strong id="selection-name" aria-live="polite">No square selected</strong><span id="selection-detail">Select any square to inspect it.</span></div>
+          <button id="flip" class="button primary" type="button"><span aria-hidden="true">⇅</span> Flip board</button>
+          <button id="reset" class="button secondary" type="button"><span aria-hidden="true">↺</span> Reset view</button>
+          <p class="hint">Use the arrow keys to explore the board.<br>Press Enter or Space to select a square.</p>
+          <div class="note"><span aria-hidden="true">◈</span><p>A small beginning.<br><span>Board exploration comes first. Moves and analysis will follow.</span></p></div>
+        </aside>
+      </section>
+    </main>
+    <footer><span>Built for the love of the game.</span><span>CHESSBE <span class="footer-dot">/</span> 64 SQUARES, ENDLESS STORIES</span></footer>
+    <noscript>Please enable JavaScript to render and explore the chessboard.</noscript>
+  </body>
+</html>
