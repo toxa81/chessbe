@@ -1,20 +1,41 @@
 # Chessbe
 
-A small chessboard explorer. The first release renders the standard starting
-position with original SVG pieces, coordinates, square inspection, keyboard
-navigation, board flipping, and a reset-view control. Piece movement and analysis
-are outside this first release.
+A small chessboard explorer built with React, TypeScript, Vite, and CSS Grid.
+It renders the standard starting position with original SVG pieces, coordinates
+outside all four sides, square inspection, keyboard navigation, board flipping,
+and a reset-view control. Piece movement and analysis are outside this release.
 
 ## Run locally
 
-No dependencies or build step are required. Serve the `site` directory:
+Use Node.js 24 (`nvm use` if you use nvm), then:
 
 ```sh
-python3 -m http.server 8000 --directory site
+npm ci
+npm run dev
 ```
 
-Open http://localhost:8000. The site also works under a repository subpath.
+Open the local URL printed by Vite. To verify the production build:
+
+```sh
+npm test
+npm run build
+npm run preview
+```
+
+`build` checks TypeScript before generating `dist/`. Relative asset paths support
+GitHub Pages repository subpaths and custom domains.
 Fonts use Google Fonts with system fallbacks; the board needs no external assets.
+
+## Source layout
+
+- `src/chess/board.ts`: typed squares, pieces, starting position, and orientation.
+- `src/components/Chessboard.tsx`: board, outside labels, and keyboard navigation.
+- `src/components/Piece.tsx`: SVG piece artwork.
+- `src/App.tsx`: selection, orientation state, and surrounding interface.
+- `src/styles.css`: responsive layout and CSS Grid board.
+
+Drag-and-drop and attack calculations can be added independently when those
+features are implemented; dnd-kit is not installed yet.
 
 ## GitHub Pages
 
@@ -26,9 +47,10 @@ One-time repository setup:
 2. Set **Source** to **GitHub Actions**.
 3. Ensure GitHub Actions is enabled for this repository.
 
-The `Deploy GitHub Pages` workflow publishes only `site/` on every push to
+The `Deploy GitHub Pages` workflow installs locked dependencies with `npm ci`,
+runs tests, checks TypeScript, builds, and publishes only `dist/` on every push to
 `main`, including merges. It can also be run manually from the Actions tab.
-No personal access token, npm installation, or generated deployment branch is needed.
+No personal access token or generated deployment branch is needed.
 The workflow uses the built-in `GITHUB_TOKEN` with Pages and OIDC permissions.
 
 If the first run fails before Pages is enabled, enable it as above and rerun the
