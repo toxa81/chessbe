@@ -8,3 +8,5 @@
 @media(prefers-reduced-motion:no-preference){.button{transition:background .15s ease}}
 
 .board-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.board-actions .button{font-size:11px;padding:0 3px;white-space:nowrap}
+
+.piece-palette{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--border);margin-top:24px}

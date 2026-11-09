@@ -1,11 +1,12 @@
 import { useReducer, useState } from 'react';
 import { Chessboard } from './components/Chessboard';
+import { PiecePalette } from './components/PiecePalette';
 import type { Square } from './chess/board';
 import { createExplorerState, explorerReducer } from './chess/explorer';
 
 export default function App() {
   const [flipped, setFlipped] = useState(false);
-  const [{ position, selected }, dispatch] = useReducer(explorerReducer, undefined, createExplorerState);
+  const [{ position, selected, palettePiece }, dispatch] = useReducer(explorerReducer, undefined, createExplorerState);
   const [active, setActive] = useState<Square>('a8');
   const selectSquare = (square: Square) => dispatch({ type: 'select', square });
   function resetBoard() {
@@ -28,6 +29,7 @@ export default function App() {
             <button id="flip" onClick={() => setFlipped(value => !value)} className="button primary" type="button">Flip board</button>
             <button id="clean" onClick={() => dispatch({ type: 'clean' })} className="button secondary" type="button">Clean board</button>
           </div>
+          <PiecePalette selected={palettePiece} onSelect={piece => dispatch({ type: 'choose-piece', piece })} />
         </aside>
       </section>
     </main>

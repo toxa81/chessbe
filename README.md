@@ -9,6 +9,10 @@ selected square deselects it; selection clears after a move. Either color can
 move at any time. Reset board restores the starting position and orientation.
 Move legality and analysis are outside this release.
 Clean board removes every piece and clears selection; it preserves orientation.
+The right panel has a 6×2 piece palette: white above black, in King, Queen, Rook,
+Bishop, Knight, Pawn order. Select a palette piece, then a board square to place
+it, replacing any occupant. Palette selection clears after placement; click the
+same palette piece again to cancel. Reset and Clean board also cancel it.
 
 ## Run locally
 

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import type { Square } from './board';
+import type { Color, Piece, PieceType, Square } from './board';
 import { createExplorerState, explorerReducer, type ExplorerState } from './explorer';
 
 const click = (state: ExplorerState, square: Square) => explorerReducer(state, { type: 'select', square });
@@ -55,4 +55,43 @@ it('cleans a selected board and can reset it to the starting position', () => {
   expect(cleaned.lastMove).toBeNull();
   expect(selected.position.size).toBe(32);
   expect(explorerReducer(cleaned, { type: 'reset' })).toEqual(createExplorerState());
+});
+
+const palettePieces = (['white', 'black'] as Color[]).flatMap(color =>
+  (['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'] as PieceType[]).map(type => ({ color, type })),
+);
+
+it.each(palettePieces)('places a $color $type on an empty square', piece => {
+  const initial = explorerReducer(createExplorerState(), { type: 'clean' });
+  const chosen = explorerReducer(initial, { type: 'choose-piece', piece });
+  expect(chosen.palettePiece).toEqual(piece);
+  const placed = click(chosen, 'e4');
+  expect(placed.position.get('e4')).toEqual(piece);
+  expect(placed.position.size).toBe(1);
+  expect(placed.palettePiece).toBeNull();
+  expect(placed.selected).toBeNull();
+  expect(initial.position.size).toBe(0);
+});
+
+it('replaces an occupied square without moving a previously selected board piece', () => {
+  const selected = click(createExplorerState(), 'a1');
+  const piece: Piece = { color: 'black', type: 'queen' };
+  const chosen = explorerReducer(selected, { type: 'choose-piece', piece });
+  expect(chosen.selected).toBeNull();
+  const placed = click(chosen, 'e1');
+  expect(placed.position.get('e1')).toEqual(piece);
+  expect(placed.position.get('a1')).toEqual(selected.position.get('a1'));
+  expect(placed.position.size).toBe(32);
+});
+
+it('switches or cancels a palette selection and clears it on reset or clean', () => {
+  const white: Piece = { color: 'white', type: 'king' };
+  const black: Piece = { color: 'black', type: 'knight' };
+  const chosen = explorerReducer(createExplorerState(), { type: 'choose-piece', piece: white });
+  const switched = explorerReducer(chosen, { type: 'choose-piece', piece: black });
+  expect(switched.palettePiece).toEqual(black);
+  expect(explorerReducer(switched, { type: 'choose-piece', piece: black }).palettePiece).toBeNull();
+  for (const type of ['clean', 'reset'] as const) {
+    expect(explorerReducer(chosen, { type }).palettePiece).toBeNull();
+  }
 });
