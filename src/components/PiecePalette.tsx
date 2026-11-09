@@ -17,7 +17,7 @@ export function PiecePalette({ selected, onSelect }: PiecePaletteProps) {
       return <button
         key={`${color}-${type}`}
         type="button"
-        className={`square${(row + column) % 2 === 1 ? ' dark' : ''}${isSelected ? ' selected' : ''}`}
+        className={`square${(row + column) % 2 === 0 ? ' dark' : ''}${isSelected ? ' selected' : ''}`}
         aria-label={`Place ${color} ${type}`}
         aria-pressed={isSelected}
         title={`Place ${color} ${type}`}
