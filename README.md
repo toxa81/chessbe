@@ -8,6 +8,7 @@ Occupied destinations replace their piece, regardless of color. Clicking the
 selected square deselects it; selection clears after a move. Either color can
 move at any time. Reset board restores the starting position and orientation.
 Move legality and analysis are outside this release.
+Clean board removes every piece and clears selection; it preserves orientation.
 
 ## Run locally
 

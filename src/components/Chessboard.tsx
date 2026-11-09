@@ -11,18 +11,16 @@ interface ChessboardProps {
   onSelect: (square: Square) => void;
 }
 
-function Player({ color, count }: { color: Color; count: number }) {
+function Player({ color }: { color: Color }) {
   return <div className="player">
     <span className={`player-icon ${color}`} aria-hidden="true">♟</span>
-    <span>{color === 'white' ? 'White' : 'Black'} pieces<small>Free placement</small></span>
-    <span className="piece-count">{count} {count === 1 ? 'piece' : 'pieces'}</span>
+    <span>{color === 'white' ? 'White' : 'Black'} pieces</span>
   </div>;
 }
 
 export function Chessboard({ position, flipped, selected, active, onActiveChange, onSelect }: ChessboardProps) {
   const { files, ranks } = boardAxes(flipped);
   const buttons = useRef(new Map<Square, HTMLButtonElement>());
-  const count = (color: Color) => [...position.values()].filter(piece => piece.color === color).length;
   const topColor = flipped ? 'white' : 'black';
   const bottomColor = flipped ? 'black' : 'white';
 
@@ -39,7 +37,7 @@ export function Chessboard({ position, flipped, selected, active, onActiveChange
   }
 
   return <div className="board-column">
-    <Player color={topColor} count={count(topColor)} />
+    <Player color={topColor} />
     <div className="board-frame">
       <div className="coordinates files top" aria-hidden="true">{files.map(file => <span key={file}>{file}</span>)}</div>
       <div className="coordinates ranks left" aria-hidden="true">{ranks.map(rank => <span key={rank}>{rank}</span>)}</div>
@@ -65,6 +63,6 @@ export function Chessboard({ position, flipped, selected, active, onActiveChange
       <div className="coordinates ranks right" aria-hidden="true">{ranks.map(rank => <span key={rank}>{rank}</span>)}</div>
       <div className="coordinates files bottom" aria-hidden="true">{files.map(file => <span key={file}>{file}</span>)}</div>
     </div>
-    <Player color={bottomColor} count={count(bottomColor)} />
+    <Player color={bottomColor} />
   </div>;
 }

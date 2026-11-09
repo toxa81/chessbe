@@ -6,7 +6,7 @@ export interface ExplorerState {
   lastMove: string | null;
 }
 
-type ExplorerAction = { type: 'select'; square: Square } | { type: 'reset' };
+type ExplorerAction = { type: 'select'; square: Square } | { type: 'reset' } | { type: 'clean' };
 
 export function createExplorerState(): ExplorerState {
   return { position: createStartingPosition(), selected: null, lastMove: null };
@@ -14,6 +14,7 @@ export function createExplorerState(): ExplorerState {
 
 export function explorerReducer(state: ExplorerState, action: ExplorerAction): ExplorerState {
   if (action.type === 'reset') return createExplorerState();
+  if (action.type === 'clean') return { position: new Map(), selected: null, lastMove: null };
   const { square } = action;
   if (square === state.selected) return { ...state, selected: null };
 

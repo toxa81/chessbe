@@ -46,3 +46,13 @@ it('resets the pieces, selection, and last move to the starting position', () =>
   const reset = explorerReducer(moved, { type: 'reset' });
   expect(reset).toEqual(createExplorerState());
 });
+
+it('cleans a selected board and can reset it to the starting position', () => {
+  const selected = click(createExplorerState(), 'e2');
+  const cleaned = explorerReducer(selected, { type: 'clean' });
+  expect(cleaned.position.size).toBe(0);
+  expect(cleaned.selected).toBeNull();
+  expect(cleaned.lastMove).toBeNull();
+  expect(selected.position.size).toBe(32);
+  expect(explorerReducer(cleaned, { type: 'reset' })).toEqual(createExplorerState());
+});
