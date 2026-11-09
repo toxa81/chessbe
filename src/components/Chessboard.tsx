@@ -1,8 +1,9 @@
 import { useRef, type KeyboardEvent } from 'react';
-import { boardAxes, isDarkSquare, startingPosition, type Color, type Square } from '../chess/board';
+import { boardAxes, isDarkSquare, type Color, type Piece as ChessPiece, type Square } from '../chess/board';
 import { Piece } from './Piece';
 
 interface ChessboardProps {
+  position: ReadonlyMap<Square, ChessPiece>;
   flipped: boolean;
   selected: Square | null;
   active: Square;
@@ -10,17 +11,20 @@ interface ChessboardProps {
   onSelect: (square: Square) => void;
 }
 
-function Player({ color }: { color: Color }) {
+function Player({ color, count }: { color: Color; count: number }) {
   return <div className="player">
     <span className={`player-icon ${color}`} aria-hidden="true">♟</span>
-    <span>{color === 'white' ? 'White' : 'Black'} pieces<small>{color === 'white' ? 'White to move' : 'Starting position'}</small></span>
-    <span className="piece-count">16 pieces</span>
+    <span>{color === 'white' ? 'White' : 'Black'} pieces<small>Free placement</small></span>
+    <span className="piece-count">{count} {count === 1 ? 'piece' : 'pieces'}</span>
   </div>;
 }
 
-export function Chessboard({ flipped, selected, active, onActiveChange, onSelect }: ChessboardProps) {
+export function Chessboard({ position, flipped, selected, active, onActiveChange, onSelect }: ChessboardProps) {
   const { files, ranks } = boardAxes(flipped);
   const buttons = useRef(new Map<Square, HTMLButtonElement>());
+  const count = (color: Color) => [...position.values()].filter(piece => piece.color === color).length;
+  const topColor = flipped ? 'white' : 'black';
+  const bottomColor = flipped ? 'black' : 'white';
 
   function navigate(event: KeyboardEvent<HTMLButtonElement>, row: number, col: number) {
     const delta: Record<string, readonly [number, number]> = {
@@ -35,14 +39,14 @@ export function Chessboard({ flipped, selected, active, onActiveChange, onSelect
   }
 
   return <div className="board-column">
-    <Player color={flipped ? 'white' : 'black'} />
+    <Player color={topColor} count={count(topColor)} />
     <div className="board-frame">
       <div className="coordinates files top" aria-hidden="true">{files.map(file => <span key={file}>{file}</span>)}</div>
       <div className="coordinates ranks left" aria-hidden="true">{ranks.map(rank => <span key={rank}>{rank}</span>)}</div>
       <div id="board" className="board" role="group" aria-label={`Chessboard, ${flipped ? 'black' : 'white'} at bottom`}>
         {ranks.flatMap((rank, row) => files.map((file, col) => {
           const square: Square = `${file}${rank}`;
-          const piece = startingPosition.get(square);
+          const piece = position.get(square);
           return <button
             key={square}
             ref={element => { if (element) buttons.current.set(square, element); else buttons.current.delete(square); }}
@@ -61,6 +65,6 @@ export function Chessboard({ flipped, selected, active, onActiveChange, onSelect
       <div className="coordinates ranks right" aria-hidden="true">{ranks.map(rank => <span key={rank}>{rank}</span>)}</div>
       <div className="coordinates files bottom" aria-hidden="true">{files.map(file => <span key={file}>{file}</span>)}</div>
     </div>
-    <Player color={flipped ? 'black' : 'white'} />
+    <Player color={bottomColor} count={count(bottomColor)} />
   </div>;
 }

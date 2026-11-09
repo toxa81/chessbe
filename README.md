@@ -3,7 +3,11 @@
 A small chessboard explorer built with React, TypeScript, Vite, and CSS Grid.
 It renders the standard starting position with original SVG pieces, coordinates
 outside all four sides, square inspection, keyboard navigation, board flipping,
-and a reset-view control. Piece movement and analysis are outside this release.
+and unrestricted click-to-move: select a piece, then click another square.
+Occupied destinations replace their piece, regardless of color. Clicking the
+selected square deselects it; selection clears after a move. Either color can
+move at any time. Reset board restores the starting position and orientation.
+Move legality and analysis are outside this release.
 
 ## Run locally
 

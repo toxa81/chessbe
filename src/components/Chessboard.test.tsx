@@ -1,9 +1,10 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { expect, it } from 'vitest';
 import { Chessboard } from './Chessboard';
+import { startingPosition } from '../chess/board';
 
 it.each([false, true])('renders labels outside the squares on all four sides (flipped: %s)', flipped => {
-  const html = renderToStaticMarkup(<Chessboard flipped={flipped} selected="e2" active="a8" onActiveChange={() => {}} onSelect={() => {}} />);
+  const html = renderToStaticMarkup(<Chessboard position={startingPosition} flipped={flipped} selected="e2" active="a8" onActiveChange={() => {}} onSelect={() => {}} />);
   const files = flipped ? 'hgfedcba' : 'abcdefgh';
   const ranks = flipped ? '12345678' : '87654321';
   for (const [axis, sides, labels] of [['files', ['top', 'bottom'], files], ['ranks', ['left', 'right'], ranks]] as const) {

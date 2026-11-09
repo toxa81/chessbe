@@ -1,18 +1,19 @@
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import { Chessboard } from './components/Chessboard';
-import { startingPosition, type Square } from './chess/board';
+import type { Square } from './chess/board';
+import { createExplorerState, explorerReducer } from './chess/explorer';
 
 export default function App() {
   const [flipped, setFlipped] = useState(false);
-  const [selected, setSelected] = useState<Square | null>(null);
+  const [{ position, selected, lastMove }, dispatch] = useReducer(explorerReducer, undefined, createExplorerState);
   const [active, setActive] = useState<Square>('a8');
-  const piece = selected ? startingPosition.get(selected) : undefined;
+  const piece = selected ? position.get(selected) : undefined;
   const selectionName = selected ? `${selected.toUpperCase()}${piece ? ` · ${piece.color} ${piece.type}` : ''}` : 'No square selected';
-  const selectionDetail = selected ? (piece ? 'A piece in its starting position.' : 'An empty square.') : 'Select any square to inspect it.';
-  const selectSquare = (square: Square) => setSelected(current => current === square ? null : square);
-  function resetView() {
+  const selectionDetail = selected ? (piece ? 'Click another square to move this piece. Click again to deselect.' : 'An empty square. Select a piece to move it.') : (lastMove ?? 'Select a piece, then click its destination.');
+  const selectSquare = (square: Square) => dispatch({ type: 'select', square });
+  function resetBoard() {
     setFlipped(false);
-    setSelected(null);
+    dispatch({ type: 'reset' });
     setActive('a8');
   }
   return <>
@@ -23,17 +24,17 @@ export default function App() {
     </header>
     <main>
       <section className="workspace" aria-label="Chessboard explorer">
-        <Chessboard flipped={flipped} selected={selected} active={active} onActiveChange={setActive} onSelect={selectSquare} />
+        <Chessboard position={position} flipped={flipped} selected={selected} active={active} onActiveChange={setActive} onSelect={selectSquare} />
         <aside className="panel">
           <div className="panel-heading"><span className="eyebrow">THE BOARD</span><span className="version">v0.2</span></div>
-          <h2>A fresh start.</h2>
-          <p>The classic starting position. Take a look around, select a square, or see the board from the other side.</p>
-          <div className="position-detail"><span className="status-dot"></span><span>Starting position</span><span className="turn">White to move</span></div>
-          <div className="selection"><span className="detail-label">SELECTED SQUARE</span><strong id="selection-name" aria-live="polite">{selectionName}</strong><span id="selection-detail">{selectionDetail}</span></div>
+          <h2>Explore the board.</h2>
+          <p>Click a piece, then click any other square to move it. An occupied destination replaces the piece there.</p>
+          <div className="position-detail"><span className="status-dot"></span><span>Free placement</span><span className="turn">Either color</span></div>
+          <div className="selection" aria-live="polite"><span className="detail-label">SELECTED SQUARE</span><strong id="selection-name">{selectionName}</strong><span id="selection-detail">{selectionDetail}</span></div>
           <button id="flip" onClick={() => setFlipped(value => !value)} className="button primary" type="button"><span aria-hidden="true">⇅</span> Flip board</button>
-          <button id="reset" onClick={resetView} className="button secondary" type="button"><span aria-hidden="true">↺</span> Reset view</button>
+          <button id="reset" onClick={resetBoard} className="button secondary" type="button"><span aria-hidden="true">↺</span> Reset board</button>
           <p className="hint">Use the arrow keys to explore the board.<br />Press Enter or Space to select a square.</p>
-          <div className="note"><span aria-hidden="true">◈</span><p>A small beginning.<br /><span>Board exploration comes first. Moves and analysis will follow.</span></p></div>
+          <div className="note"><span aria-hidden="true">◈</span><p>Your board, your moves.<br /><span>No move rules or turns. Reset the board to start again.</span></p></div>
         </aside>
       </section>
     </main>
