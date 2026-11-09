@@ -6,7 +6,7 @@ import { createExplorerState, explorerReducer } from './chess/explorer';
 
 export default function App() {
   const [flipped, setFlipped] = useState(false);
-  const [{ position, selected, palettePiece }, dispatch] = useReducer(explorerReducer, undefined, createExplorerState);
+  const [{ position, selected, palettePiece, deleteMode }, dispatch] = useReducer(explorerReducer, undefined, createExplorerState);
   const [active, setActive] = useState<Square>('a8');
   const selectSquare = (square: Square) => dispatch({ type: 'select', square });
   function resetBoard() {
@@ -29,7 +29,16 @@ export default function App() {
             <button id="flip" onClick={() => setFlipped(value => !value)} className="button primary" type="button">Flip board</button>
             <button id="clean" onClick={() => dispatch({ type: 'clean' })} className="button secondary" type="button">Clean board</button>
           </div>
+          <p className="tool-hint">To add a piece, select it below, then click a board square.</p>
           <PiecePalette selected={palettePiece} onSelect={piece => dispatch({ type: 'choose-piece', piece })} />
+          <p id="delete-hint" className="tool-hint">To remove pieces, turn on Delete pieces, then click them on the board. Toggle it off when finished.</p>
+          <button
+            className={`button ${deleteMode ? 'primary' : 'secondary'} delete-toggle`}
+            type="button"
+            aria-pressed={deleteMode}
+            aria-describedby="delete-hint"
+            onClick={() => dispatch({ type: 'toggle-delete' })}
+          >Delete pieces</button>
         </aside>
       </section>
     </main>

@@ -13,6 +13,10 @@ The right panel has a 6×2 piece palette: white above black, in King, Queen, Roo
 Bishop, Knight, Pawn order. Select a palette piece, then a board square to place
 it, replacing any occupant. Palette selection clears after placement; click the
 same palette piece again to cancel. Reset and Clean board also cancel it.
+Toggle **Delete pieces** below the palette to remove pieces by clicking board
+squares. Delete mode stays on for repeated removals and ignores empty squares.
+Toggle it off, select a palette piece, reset, or clean the board to leave delete
+mode. Enabling it clears any existing board or palette selection.
 
 ## Run locally
 

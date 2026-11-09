@@ -95,3 +95,41 @@ it('switches or cancels a palette selection and clears it on reset or clean', ()
     expect(explorerReducer(chosen, { type }).palettePiece).toBeNull();
   }
 });
+
+it('deletes multiple pieces while active and ignores empty squares without mutating the original', () => {
+  const initial = createExplorerState();
+  const active = explorerReducer(initial, { type: 'toggle-delete' });
+  const first = click(active, 'e2');
+  const second = click(first, 'e8');
+  expect(second.position.has('e2')).toBe(false);
+  expect(second.position.has('e8')).toBe(false);
+  expect(second.position.size).toBe(30);
+  expect(second.deleteMode).toBe(true);
+  expect(second.selected).toBeNull();
+  expect(click(second, 'e4')).toBe(second);
+  expect(initial.position.size).toBe(32);
+});
+
+it('clears board and palette selection when delete mode is enabled', () => {
+  const boardSelected = click(createExplorerState(), 'e2');
+  const paletteSelected = explorerReducer(createExplorerState(), { type: 'choose-piece', piece: { color: 'black', type: 'queen' } });
+  for (const state of [boardSelected, paletteSelected]) {
+    const active = explorerReducer(state, { type: 'toggle-delete' });
+    expect(active.selected).toBeNull();
+    expect(active.palettePiece).toBeNull();
+    expect(click(active, 'd1').position.has('d1')).toBe(false);
+  }
+});
+
+it('leaves delete mode when toggled off, choosing a palette piece, resetting, or cleaning', () => {
+  const active = explorerReducer(createExplorerState(), { type: 'toggle-delete' });
+  const off = explorerReducer(active, { type: 'toggle-delete' });
+  expect(off.deleteMode).toBe(false);
+  expect(click(off, 'e2').selected).toBe('e2');
+  const chosen = explorerReducer(active, { type: 'choose-piece', piece: { color: 'white', type: 'rook' } });
+  expect(chosen.deleteMode).toBe(false);
+  expect(click(chosen, 'e4').position.get('e4')).toEqual({ color: 'white', type: 'rook' });
+  for (const type of ['reset', 'clean'] as const) {
+    expect(explorerReducer(active, { type }).deleteMode).toBe(false);
+  }
+});

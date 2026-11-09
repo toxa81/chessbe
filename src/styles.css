@@ -9,4 +9,5 @@
 
 .board-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.board-actions .button{font-size:11px;padding:0 3px;white-space:nowrap}
 
-.piece-palette{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--border);margin-top:24px}
+.piece-palette{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--border)}
+.tool-hint{font-size:12px;line-height:1.6;color:var(--muted);margin:24px 0 10px}.delete-toggle{max-width:160px}
