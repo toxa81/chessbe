@@ -22,11 +22,6 @@ export default function App() {
       <a className="source-link" href="https://github.com/toxa81/chessbe">GitHub <span aria-hidden="true">↗</span></a>
     </header>
     <main>
-      <section className="intro" aria-labelledby="page-title">
-        <p className="eyebrow"><span></span> THE FIRST POSITION</p>
-        <h1 id="page-title">Every game starts here.</h1>
-        <p className="subtitle">Sixty-four squares. A world of possibilities.</p>
-      </section>
       <section className="workspace" aria-label="Chessboard explorer">
         <Chessboard flipped={flipped} selected={selected} active={active} onActiveChange={setActive} onSelect={selectSquare} />
         <aside className="panel">
@@ -42,6 +37,6 @@ export default function App() {
         </aside>
       </section>
     </main>
-    <footer><span>Built for the love of the game.</span><span>CHESSBE <span className="footer-dot">/</span> 64 SQUARES, ENDLESS STORIES</span></footer>
+    <footer />
   </>;
 }
