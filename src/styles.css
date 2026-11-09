@@ -11,3 +11,5 @@
 
 .piece-palette{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--border)}
 .tool-hint{font-size:12px;line-height:1.6;color:var(--muted);margin:24px 0 10px}.delete-toggle{max-width:160px}
+
+.attack-markers{position:absolute;left:4px;width:calc(100% - 8px);height:clamp(3px,.65vw,6px);pointer-events:none;z-index:2;overflow:visible}.attack-markers.top{top:3px}.attack-markers.bottom{bottom:3px}.attack-markers.white{fill:#1769d2}.attack-markers.black{fill:#d52d32}.attack-markers circle{stroke:#ffffff;stroke-width:.65}

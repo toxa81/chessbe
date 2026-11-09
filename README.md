@@ -18,6 +18,13 @@ squares. Delete mode stays on for repeated removals and ignores empty squares.
 Toggle it off, select a palette piece, reset, or clean the board to leave delete
 mode. Enabling it clears any existing board or palette selection.
 
+Attack markers update after every board edit: one blue circle per white attacker
+and one red circle per black attacker. Rows follow each color's starting side
+and swap top/bottom when flipped. Pawns attack diagonally, knights jump, and
+sliding attacks include the first occupied square but stop there. Kings mark
+adjacent squares; pins do not suppress attacks. Markers show attacks/defenses,
+not legal moves, castling, or en passant.
+
 ## Run locally
 
 Use Node.js 24 (`nvm use` if you use nvm), then:

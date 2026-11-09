@@ -1,6 +1,8 @@
-import { useRef, type KeyboardEvent } from 'react';
+import { useMemo, useRef, type KeyboardEvent } from 'react';
 import { boardAxes, isDarkSquare, type Color, type Piece as ChessPiece, type Square } from '../chess/board';
 import { Piece } from './Piece';
+import { calculateAttacks } from '../chess/attacks';
+import { AttackMarkers } from './AttackMarkers';
 
 interface ChessboardProps {
   position: ReadonlyMap<Square, ChessPiece>;
@@ -20,6 +22,7 @@ function Player({ color }: { color: Color }) {
 
 export function Chessboard({ position, flipped, selected, active, onActiveChange, onSelect }: ChessboardProps) {
   const { files, ranks } = boardAxes(flipped);
+  const attacks = useMemo(() => calculateAttacks(position), [position]);
   const buttons = useRef(new Map<Square, HTMLButtonElement>());
   const topColor = flipped ? 'white' : 'black';
   const bottomColor = flipped ? 'black' : 'white';
@@ -45,6 +48,10 @@ export function Chessboard({ position, flipped, selected, active, onActiveChange
         {ranks.flatMap((rank, row) => files.map((file, col) => {
           const square: Square = `${file}${rank}`;
           const piece = position.get(square);
+          const squareAttacks = attacks.get(square);
+          const whiteAttacks = squareAttacks?.white ?? [];
+          const blackAttacks = squareAttacks?.black ?? [];
+          const attackDescription = `Attacks: ${whiteAttacks.length} white, ${blackAttacks.length} black.`;
           return <button
             key={square}
             ref={element => { if (element) buttons.current.set(square, element); else buttons.current.delete(square); }}
@@ -53,11 +60,17 @@ export function Chessboard({ position, flipped, selected, active, onActiveChange
             data-square={square}
             tabIndex={active === square ? 0 : -1}
             aria-label={`${square}, ${piece ? `${piece.color} ${piece.type}` : 'empty'}`}
+            aria-description={attackDescription}
+            title={attackDescription}
             aria-pressed={selected === square}
             onFocus={() => onActiveChange(square)}
             onClick={() => { onActiveChange(square); onSelect(square); }}
             onKeyDown={event => navigate(event, row, col)}
-          >{piece && <Piece piece={piece} />}</button>;
+          >
+            {piece && <Piece piece={piece} />}
+            <AttackMarkers color="white" sources={whiteAttacks} edge={flipped ? 'top' : 'bottom'} />
+            <AttackMarkers color="black" sources={blackAttacks} edge={flipped ? 'bottom' : 'top'} />
+          </button>;
         }))}
       </div>
       <div className="coordinates ranks right" aria-hidden="true">{ranks.map(rank => <span key={rank}>{rank}</span>)}</div>
