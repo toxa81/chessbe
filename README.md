@@ -26,8 +26,8 @@ adjacent squares; pins do not suppress attacks. Markers show attacks/defenses,
 not legal moves, castling, or en passant.
 The **highlight** controls switch between **off** (no visual attack markers),
 **dots** (the default circles), and **squares** (blue for white attacks, red for black attacks, purple for attacks
-by both colors). Square highlights are 25%-opacity overlays, preserving the white
-and brown checkerboard underneath. Unattacked squares keep their board colors. The display preference survives board edits,
+by both colors). Square highlights use pure RGB blue/red at 45% opacity and purple
+(RGB 255, 0, 255) at 60% opacity, preserving the checkerboard underneath. Unattacked squares keep their board colors. The display preference survives board edits,
 flipping, reset, and cleaning; square attack counts remain available on hover.
 
 ## Run locally

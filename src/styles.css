@@ -14,4 +14,4 @@
 
 .attack-markers{position:absolute;left:4px;width:calc(100% - 8px);height:clamp(3px,.65vw,6px);pointer-events:none;z-index:2;overflow:visible}.attack-markers.top{top:3px}.attack-markers.bottom{bottom:3px}.attack-markers.white{fill:#1769d2}.attack-markers.black{fill:#d52d32}.attack-markers circle{stroke:#ffffff;stroke-width:.65}
 
-.highlight-title{font-size:14px;font-weight:600;margin:24px 0 10px}.square.attack-white{background-image:linear-gradient(rgb(23 105 210 / 25%),rgb(23 105 210 / 25%))}.square.attack-black{background-image:linear-gradient(rgb(213 45 50 / 25%),rgb(213 45 50 / 25%))}.square.attack-both{background-image:linear-gradient(rgb(139 76 187 / 25%),rgb(139 76 187 / 25%))}
+.highlight-title{font-size:14px;font-weight:600;margin:24px 0 10px}.square.attack-white{background-image:linear-gradient(rgb(0 0 255 / 45%),rgb(0 0 255 / 45%))}.square.attack-black{background-image:linear-gradient(rgb(255 0 0 / 45%),rgb(255 0 0 / 45%))}.square.attack-both{background-image:linear-gradient(rgb(255 0 255 / 60%),rgb(255 0 255 / 60%))}
