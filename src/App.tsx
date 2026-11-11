@@ -1,5 +1,5 @@
 import { useReducer, useState } from 'react';
-import { Chessboard } from './components/Chessboard';
+import { Chessboard, type HighlightMode } from './components/Chessboard';
 import { PiecePalette } from './components/PiecePalette';
 import type { Square } from './chess/board';
 import { createExplorerState, explorerReducer } from './chess/explorer';
@@ -8,6 +8,7 @@ export default function App() {
   const [flipped, setFlipped] = useState(false);
   const [{ position, selected, palettePiece, deleteMode }, dispatch] = useReducer(explorerReducer, undefined, createExplorerState);
   const [active, setActive] = useState<Square>('a8');
+  const [highlightMode, setHighlightMode] = useState<HighlightMode>('dots');
   const selectSquare = (square: Square) => dispatch({ type: 'select', square });
   function resetBoard() {
     setFlipped(false);
@@ -22,7 +23,7 @@ export default function App() {
     </header>
     <main>
       <section className="workspace" aria-label="Chessboard explorer">
-        <Chessboard position={position} flipped={flipped} selected={selected} active={active} onActiveChange={setActive} onSelect={selectSquare} />
+        <Chessboard position={position} flipped={flipped} selected={selected} active={active} highlightMode={highlightMode} onActiveChange={setActive} onSelect={selectSquare} />
         <aside className="panel" aria-label="Board controls">
           <div className="board-actions">
             <button id="reset" onClick={resetBoard} className="button secondary" type="button">Reset board</button>
@@ -39,6 +40,16 @@ export default function App() {
             aria-describedby="delete-hint"
             onClick={() => dispatch({ type: 'toggle-delete' })}
           >Delete pieces</button>
+          <h2 id="highlight-title" className="highlight-title">highlight</h2>
+          <div className="board-actions" role="group" aria-labelledby="highlight-title">
+            {(['off', 'dots', 'squares'] as const).map(mode => <button
+              key={mode}
+              type="button"
+              className={`button ${highlightMode === mode ? 'primary' : 'secondary'}`}
+              aria-pressed={highlightMode === mode}
+              onClick={() => setHighlightMode(mode)}
+            >{mode}</button>)}
+          </div>
         </aside>
       </section>
     </main>

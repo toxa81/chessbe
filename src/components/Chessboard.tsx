@@ -4,11 +4,14 @@ import { Piece } from './Piece';
 import { calculateAttacks } from '../chess/attacks';
 import { AttackMarkers } from './AttackMarkers';
 
+export type HighlightMode = 'off' | 'dots' | 'squares';
+
 interface ChessboardProps {
   position: ReadonlyMap<Square, ChessPiece>;
   flipped: boolean;
   selected: Square | null;
   active: Square;
+  highlightMode?: HighlightMode;
   onActiveChange: (square: Square) => void;
   onSelect: (square: Square) => void;
 }
@@ -20,7 +23,7 @@ function Player({ color }: { color: Color }) {
   </div>;
 }
 
-export function Chessboard({ position, flipped, selected, active, onActiveChange, onSelect }: ChessboardProps) {
+export function Chessboard({ position, flipped, selected, active, highlightMode = 'dots', onActiveChange, onSelect }: ChessboardProps) {
   const { files, ranks } = boardAxes(flipped);
   const attacks = useMemo(() => calculateAttacks(position), [position]);
   const buttons = useRef(new Map<Square, HTMLButtonElement>());
@@ -52,11 +55,13 @@ export function Chessboard({ position, flipped, selected, active, onActiveChange
           const whiteAttacks = squareAttacks?.white ?? [];
           const blackAttacks = squareAttacks?.black ?? [];
           const attackDescription = `Attacks: ${whiteAttacks.length} white, ${blackAttacks.length} black.`;
+          const attackColor = whiteAttacks.length ? (blackAttacks.length ? 'both' : 'white') : (blackAttacks.length ? 'black' : null);
+          const highlightClass = highlightMode === 'squares' && attackColor ? ` attack-${attackColor}` : '';
           return <button
             key={square}
             ref={element => { if (element) buttons.current.set(square, element); else buttons.current.delete(square); }}
             type="button"
-            className={`square${isDarkSquare(file, rank) ? ' dark' : ''}${selected === square ? ' selected' : ''}`}
+            className={`square${isDarkSquare(file, rank) ? ' dark' : ''}${highlightClass}${selected === square ? ' selected' : ''}`}
             data-square={square}
             tabIndex={active === square ? 0 : -1}
             aria-label={`${square}, ${piece ? `${piece.color} ${piece.type}` : 'empty'}`}
@@ -68,8 +73,10 @@ export function Chessboard({ position, flipped, selected, active, onActiveChange
             onKeyDown={event => navigate(event, row, col)}
           >
             {piece && <Piece piece={piece} />}
-            <AttackMarkers color="white" sources={whiteAttacks} edge={flipped ? 'top' : 'bottom'} />
-            <AttackMarkers color="black" sources={blackAttacks} edge={flipped ? 'bottom' : 'top'} />
+            {highlightMode === 'dots' && <>
+              <AttackMarkers color="white" sources={whiteAttacks} edge={flipped ? 'top' : 'bottom'} />
+              <AttackMarkers color="black" sources={blackAttacks} edge={flipped ? 'bottom' : 'top'} />
+            </>}
           </button>;
         }))}
       </div>
